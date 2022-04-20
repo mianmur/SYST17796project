@@ -54,13 +54,6 @@ public class GoFish extends Game {
         declareWinner();
     }
 
-    @Override
-    public void declareWinner() {
-        System.out.println(
-                player1.getPoints() > player2.getPoints()
-                ? "Player 1 wins" : "Player 2 wins");
-    }
-
     public void turn() {
         do {
             if (count % 2 == 0) {
@@ -72,7 +65,37 @@ public class GoFish extends Game {
             }
         } while (0 < deck.getSize());
     }
+    
+    public void showHand() {
+        if (count % 2 == 0) {
+            System.out.println("Your Hand:");
+            for (Card player1Hand1 : player1Hand) {
+                System.out.println(player1Hand1);
+            }
+        } else {
+            System.out.println("Your Hand:");
+            for (Card player2Hand1 : player2Hand) {
+                System.out.println(player2Hand1);
+            }
+        }
+    }
+    
+    public void playerChoose(int i) {
+        System.out.printf("Player %d pick a SUIT: 1. HEARTS 2. CLUBS 3. SPADES 4. DIAMONDS:\n", i);
+        suitChoice = scanner.nextInt() - 1;
+        System.out.println("Pick a VALUE: \n1. ACE 2. TWO 3. THREE"
+                + "\n4. FOUR 5. FIVE 6. SIX"
+                + "\n7. SEVEN 8. EIGHT 9. NINE, 10. TEN"
+                + "\n11. JACK 12. QUEEN 13. KING");
+        System.out.print("Choice: ");
+        valueChoice = scanner.nextInt() - 1;
 
+        guess = new Card(Suit.values()[suitChoice], Value.values()[valueChoice]);
+        compareHand();
+
+        count++;
+    }
+    
     public void compareHand() {
         boolean temp = false;
         if (count % 2 == 0) {
@@ -110,34 +133,11 @@ public class GoFish extends Game {
         }
     }
 
-    public void playerChoose(int i) {
-        System.out.printf("Player %d pick a SUIT: 1. HEARTS 2. CLUBS 3. SPADES 4. DIAMONDS:\n", i);
-        suitChoice = scanner.nextInt() - 1;
-        System.out.println("Pick a VALUE: \n1. ACE 2. TWO 3. THREE"
-                + "\n4. FOUR 5. FIVE 6. SIX"
-                + "\n7. SEVEN 8. EIGHT 9. NINE, 10. TEN"
-                + "\n11. JACK 12. QUEEN 13. KING");
-        System.out.print("Choice: ");
-        valueChoice = scanner.nextInt() - 1;
-
-        guess = new Card(Suit.values()[suitChoice], Value.values()[valueChoice]);
-        compareHand();
-
-        count++;
-    }
-
-    public void showHand() {
-        if (count % 2 == 0) {
-            System.out.println("Your Hand:");
-            for (Card player1Hand1 : player1Hand) {
-                System.out.println(player1Hand1);
-            }
-        } else {
-            System.out.println("Your Hand:");
-            for (Card player2Hand1 : player2Hand) {
-                System.out.println(player2Hand1);
-            }
-        }
+    @Override
+    public void declareWinner() {
+        System.out.println(
+                player1.getPoints() > player2.getPoints()
+                ? "Player 1 wins" : "Player 2 wins");
     }
 
     public static void main(String args[]) {
