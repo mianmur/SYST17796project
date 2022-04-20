@@ -12,10 +12,11 @@ import java.util.Collections;
 public class Deck {
     private int size;
     // store all the cards into mainDeck
-    private ArrayList<Card> mainDeck = new ArrayList<Card>();
+    public ArrayList<Card> mainDeck;
     
     
     public Deck(int size){
+        this.mainDeck = new ArrayList<>();
         this.size = size;
         generateCards();
         shuffle();
