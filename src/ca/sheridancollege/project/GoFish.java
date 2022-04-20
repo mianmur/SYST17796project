@@ -23,7 +23,9 @@ public class GoFish extends Game {
     private int suitChoice;
     private int valueChoice;
     private Card guess;
-    int count = 0;
+    private int count = 0;
+    private int player1Points;
+    private int player2Points;
 
     public GoFish() {
         super("Go Fish");
@@ -49,19 +51,14 @@ public class GoFish extends Game {
             player2Hand.add(deck.drawCard());
         }
 
+        // Start game and goes in order of what to do
         turn();
-
+        calcPoints();
         declareWinner();
     }
 
-    @Override
-    public void declareWinner() {
-        System.out.println(
-                player1.getPoints() > player2.getPoints()
-                ? "Player 1 wins" : "Player 2 wins");
-    }
-
     public void turn() {
+        // If count is even, that means it is player 1s turn
         do {
             if (count % 2 == 0) {
                 showHand();
@@ -70,10 +67,44 @@ public class GoFish extends Game {
                 showHand();
                 playerChoose(2);
             }
-        } while (0 < deck.getSize());
+        } while (0 < deck.getSize()); // Will loop through this function as long as there are cards in the deck
     }
+    
+    public void showHand() {
+        // Same idea as turn
+        if (count % 2 == 0) {
+            System.out.println("Your Hand:");
+            for (Card player1Hand1 : player1Hand) {
+                System.out.println(player1Hand1);
+            }
+        } else {
+            System.out.println("Your Hand:");
+            for (Card player2Hand1 : player2Hand) {
+                System.out.println(player2Hand1);
+            }
+        }
+    }
+    
+    public void playerChoose(int i) {
+        System.out.printf("Player %d pick a SUIT: 1. HEARTS 2. CLUBS 3. SPADES 4. DIAMONDS:\n", i);
+        suitChoice = scanner.nextInt();
+        System.out.println("Pick a VALUE: \n1. ACE 2. TWO 3. THREE"
+                + "\n4. FOUR 5. FIVE 6. SIX"
+                + "\n7. SEVEN 8. EIGHT 9. NINE, 10. TEN"
+                + "\n11. JACK 12. QUEEN 13. KING");
+        System.out.print("Choice: ");
+        valueChoice = scanner.nextInt();
 
+        // Minus 1 from the choices as arrays start from 0
+        guess = new Card(Suit.values()[suitChoice-1], Value.values()[valueChoice-1]);
+        
+        compareHand();
+        count++;
+    }
+    
     public void compareHand() {
+        // Create a temp value in order to access Go Fish function since if else is not viable 
+        // (will draw 7 cards otherwise)
         boolean temp = false;
         if (count % 2 == 0) {
             for (int i = 0; i < player2Hand.size(); i++) {
@@ -110,38 +141,39 @@ public class GoFish extends Game {
         }
     }
 
-    public void playerChoose(int i) {
-        System.out.printf("Player %d pick a SUIT: 1. HEARTS 2. CLUBS 3. SPADES 4. DIAMONDS:\n", i);
-        suitChoice = scanner.nextInt() - 1;
-        System.out.println("Pick a VALUE: \n1. ACE 2. TWO 3. THREE"
-                + "\n4. FOUR 5. FIVE 6. SIX"
-                + "\n7. SEVEN 8. EIGHT 9. NINE, 10. TEN"
-                + "\n11. JACK 12. QUEEN 13. KING");
-        System.out.print("Choice: ");
-        valueChoice = scanner.nextInt() - 1;
-
-        guess = new Card(Suit.values()[suitChoice], Value.values()[valueChoice]);
-        compareHand();
-
-        count++;
-    }
-
-    public void showHand() {
-        if (count % 2 == 0) {
-            System.out.println("Your Hand:");
-            for (Card player1Hand1 : player1Hand) {
-                System.out.println(player1Hand1);
-            }
-        } else {
-            System.out.println("Your Hand:");
-            for (Card player2Hand1 : player2Hand) {
-                System.out.println(player2Hand1);
+    public void calcPoints() {
+        // Goes through each card and adds to a value. Once 4 are the same (4 of a kind) a player gets a point
+        int temp=0;
+        for (Card c : player1Hand) {
+            for (int i = 0; i < player1Hand.size(); i++) {
+                if (c.getValue() == player1Hand.get(i).getValue()) {
+                    temp++; if (temp==4) { player1Points++; temp=0; }
+                }
             }
         }
+        temp=0; // set temp to 0 so leftover points are not mistakenly added
+        for (Card c : player2Hand) {
+            for (int i = 0; i < player2Hand.size(); i++) {
+                if (c.getValue() == player2Hand.get(i).getValue()) {
+                    temp++; if (temp==4) { player2Points++; temp=0; }
+                }
+            }
+        }
+        
+        // Add the points to the player object instead of using a dummy value
+        player1.setPoints(player1Points);
+        player2.setPoints(player2Points);
+    }
+    
+    @Override
+    public void declareWinner() {
+        System.out.println(
+                player1.getPoints() > player2.getPoints()
+                ? "Player 1 wins" : "Player 2 wins");
     }
 
     public static void main(String args[]) {
-        GoFish test = new GoFish();
-        test.play();
+        GoFish fish = new GoFish();
+        fish.play();
     }
 }
