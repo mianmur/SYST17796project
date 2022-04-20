@@ -21,9 +21,9 @@ public class mainDeckTest {
      * Testing package for Deck and Card
      */
     @Test // tests if the method call functions
-    public void testDrawCard() {
+    public void testDrawCardGood() {
         ArrayList<Card> testHand = new ArrayList<Card>();
-        System.out.println("Testing drawCard");
+        System.out.println("Draw Card Good");
         testHand.add(testDeck.drawCard());
         boolean expResult = true;
         boolean result = testHand.size() == 1 ? true : false;
@@ -31,8 +31,8 @@ public class mainDeckTest {
     }
     
     @Test // test the size of the deck after a card is drawn. 
-    public void testDeckSize(){
-        System.out.println("Testing deck size");
+    public void testDrawCardBad(){
+        System.out.println("Draw Card Bad");
         testDeck.drawCard();  // no need to store it
         boolean expResult = true;  // that is works
         boolean result = testDeck.getSize() == 51 ? true : false; // should be 51
@@ -41,8 +41,28 @@ public class mainDeckTest {
     
     
     @Test // test for duplication
-    public void testDuplicates(){
-        System.out.println("Testing duplicates");
+    public void testDuplicatesGood(){
+        System.out.println("Duplicates Good");
+        ArrayList<Card> testHand = new ArrayList<Card>(); // create a test hand to store cards
+        boolean expResult = true;
+        boolean result = true;  // init and set to false
+        for (int i = 0; i < testDeck.getSize(); i++) {
+            testHand.add(testDeck.drawCard());     // add to test hand        
+        }
+        for(Card c : testHand){
+            // check if the suit and value matches with the card created and added above
+            if (c.getSuit() == testHand.get(testHand.size() - 1).getSuit() && c.getValue() == testHand.get(testHand.size() - 1).getValue()) {
+                System.out.println("FOUND");
+                result = false;  // we are expecting to find a double so set it to true
+                break;  // break the for loop
+            }
+        }
+        assertEquals(expResult, result); // check the results        
+    }
+    
+    @Test
+    public void testDuplicatesBad(){
+        System.out.println("Duplicates Bad");
         ArrayList<Card> testHand = new ArrayList<Card>(); // create a test hand to store cards
         boolean expResult = true;
         boolean result = false;  // init and set to false
@@ -58,7 +78,8 @@ public class mainDeckTest {
                 break;  // break the for loop
             }
         }
-        assertEquals(expResult, result); // check the results        
+        assertEquals(expResult, result); // check the results 
     }
     
+   
 }
