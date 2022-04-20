@@ -10,30 +10,28 @@ import ca.sheridancollege.project.Deck;
 import ca.sheridancollege.project.Suit;
 import ca.sheridancollege.project.Value;
 import java.util.ArrayList;
-import java.util.Scanner;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class mainDeckTest {
-    Scanner userInput = new Scanner(System.in);
     Deck testDeck = new Deck(52);
     /**
      * Testing package for Deck and Card
      */
-    @Test // tests if the method call functions
+    @Test // tests that the card is drawn from the deck and stored to a hand
     public void testDrawCardGood() {
         ArrayList<Card> testHand = new ArrayList<Card>();
         System.out.println("Draw Card Good");
-        testHand.add(testDeck.drawCard());
+        testHand.add(testDeck.drawCard());  // save to array to represent hand
         boolean expResult = true;
         boolean result = testHand.size() == 1 ? true : false;
         assertEquals(expResult, result); // check the results
     }
     
-    @Test // test the size of the deck after a card is drawn. 
+    @Test // test that the card is drawn but is not stored to a hand 
     public void testDrawCardBad(){
         System.out.println("Draw Card Bad");
-        testDeck.drawCard();  // no need to store it
+        testDeck.drawCard();  // no need to store it, however, this causes the card to disappear
         boolean expResult = true;  // that is works
         boolean result = testDeck.getSize() == 51 ? true : false; // should be 51
         assertEquals(expResult, result); // check the results
@@ -60,7 +58,7 @@ public class mainDeckTest {
         assertEquals(expResult, result); // check the results        
     }
     
-    @Test
+    @Test // test for duplication by adding a card to the hand
     public void testDuplicatesBad(){
         System.out.println("Duplicates Bad");
         ArrayList<Card> testHand = new ArrayList<Card>(); // create a test hand to store cards
